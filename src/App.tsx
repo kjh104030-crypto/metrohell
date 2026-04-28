@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { Users, Book, ShieldAlert, TrainFront, ChevronLeft, MapPin, ScanLine, Skull, Eye, Crosshair, Flame, Activity } from 'lucide-react';
+import { Users, Book, ShieldAlert, TrainFront, ChevronLeft, MapPin, ScanLine, Skull, Eye, Crosshair, Flame, Activity, Package, DollarSign } from 'lucide-react';
 import { cn } from './lib/utils';
 
 // --- Placeholder Page Components ---
@@ -44,12 +44,265 @@ function SectionSkeleton() {
   );
 }
 
+const CHARACTERS_DATA = [
+  {
+    id: 'C-01',
+    name: '일라이 (Eli)',
+    role: '전직 배관공 / 도망자',
+    faction: '무소속',
+    status: '추적당하는 중 (HUNTED)',
+    desc: '지하의 환풍구와 배관 구조를 완벽하게 파악하고 있는 생존자. 빛의 교단이 숨기고 있던 노후화된 배수로의 치명적 결함을 발견한 후 사냥의 표적이 되었다.',
+    dangerLevel: 'CRITICAL',
+    imageType: 'SURVIVOR',
+    imagePath: 'https://i.postimg.cc/Ls2DQyjS/jemog-eul-iblyeoghaejuseyo-(4).png'
+  },
+  {
+    id: 'C-02',
+    name: '하운드-07 (Hound-07)',
+    role: '이단 심문관',
+    faction: '빛의 교단',
+    status: '추적 중 (HUNTING)',
+    desc: '감정을 제거당한 채 오직 사냥만을 위해 훈련된 빛의 교단의 정예 추적자. 소음기가 장착된 저격총과 열화상 감지기로 완전한 어둠 속에서 목표를 유린한다.',
+    dangerLevel: 'EXTREME',
+    imageType: 'HUNTER'
+  },
+  {
+    id: 'C-03',
+    name: '마담 티 (Madame T)',
+    role: '상단 주도자',
+    faction: '블랙 마켓',
+    status: '관망 중 (NEUTRAL)',
+    desc: '탄피 하나에 목숨표 하나를 거래하는 지하 세계의 대상인. 그 누구도 그녀의 진짜 얼굴을 10초 이상 본 적이 없으며, 항상 두꺼운 방진 마스크 뒤에 숨어 있다.',
+    dangerLevel: 'MEDIUM',
+    imageType: 'MERCHANT'
+  },
+  {
+    id: 'C-04',
+    name: '크로우 (Crow)',
+    role: '길잡이',
+    faction: '맥박 감시자',
+    status: '도주 지원 (SUPPORT)',
+    desc: '소리만으로 모든 움직임을 파악해내는 정보조직의 말단. 과거 사냥개들의 이명 함정에 걸려 청력을 일부 잃었지만, 뼈의 진동으로 선로의 맥박을 읽어낸다.',
+    dangerLevel: 'HIGH',
+    imageType: 'SCOUT'
+  }
+];
+
 function CharactersPage() {
+  const [activeCharacter, setActiveCharacter] = useState<typeof CHARACTERS_DATA[0] | null>(null);
+  const [viewingImage, setViewingImage] = useState<string | null>(null);
+
+  // Esc key closure
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setViewingImage(prev => {
+          if (prev) return null;
+          setActiveCharacter(null);
+          return null;
+        });
+      }
+    };
+    window.addEventListener('keydown', handleEsc);
+    return () => window.removeEventListener('keydown', handleEsc);
+  }, []);
+
   return (
-    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="max-w-5xl mx-auto pt-16 px-6 pb-24">
-      <PageHeader title="등장인물 (Characters)" subtitle="생존자, 추적자, 그리고 도망자들의 기록" icon={Users} />
-      <SectionSkeleton />
-    </motion.div>
+    <>
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="max-w-7xl mx-auto pt-16 px-6 pb-24 h-full relative z-10">
+        <PageHeader title="등장인물 (Characters)" subtitle="생존자, 추적자, 그리고 도망자들의 기록" icon={Users} />
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {CHARACTERS_DATA.map((char, i) => (
+            <motion.div 
+              key={char.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.1 }}
+              onClick={() => setActiveCharacter(char)}
+              className="group cursor-pointer border border-zinc-800 bg-[#141414] p-4 flex flex-col items-center justify-center aspect-[3/4] hover:border-zinc-500 transition-colors relative overflow-hidden"
+            >
+              {/* Background gradient on hover */}
+              <div className="absolute inset-0 bg-gradient-to-t from-red-950/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              
+              <div className="w-24 h-24 mb-6 rounded-full bg-zinc-900 border-2 border-zinc-800 flex items-center justify-center overflow-hidden">
+                {char.imagePath ? <img src={char.imagePath} alt={char.name} className="w-full h-full object-cover" /> : <Users className="w-10 h-10 text-zinc-700" />}
+              </div>
+              <h3 className="font-sans font-bold text-lg text-zinc-200 uppercase tracking-widest">{char.name}</h3>
+              <p className="text-zinc-500 font-mono text-xs mt-2">{char.id}</p>
+              
+              <div className="mt-4 px-3 py-1 bg-zinc-900 border border-zinc-800 text-[10px] font-mono tracking-widest text-zinc-400">
+                조회 가능 (CLICK TO VIEW)
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
+
+      {/* ID Card Overlay Modal */}
+      <AnimatePresence>
+        {activeCharacter && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, transition: { duration: 0.2 } }}
+            className="fixed inset-0 z-50 flex items-start justify-center overflow-hidden pointer-events-none"
+          >
+            {/* Dark background - pointer events auto to allow clicking to close */}
+            <div 
+              className="absolute inset-0 bg-black/80 backdrop-blur-sm pointer-events-auto"
+              onClick={() => setActiveCharacter(null)}
+            />
+            
+            {/* Swinging ID Card Container */}
+            <motion.div
+              initial={{ y: '-100vh', rotate: -15 }}
+              animate={{ y: 0, rotate: 0 }}
+              exit={{ y: '100vh', rotate: 10, transition: { type: 'spring', stiffness: 50, damping: 15 } }}
+              transition={{ 
+                type: 'spring', 
+                bounce: 0.6, 
+                damping: 10, 
+                stiffness: 70,
+                duration: 1
+              }}
+              className="relative flex flex-col items-center pointer-events-auto cursor-default mt-0 sm:mt-[2vh]"
+              style={{ transformOrigin: 'top center' }}
+            >
+              {/* Lanyard / String */}
+              <div className="w-1.5 h-[20vh] sm:h-[15vh] bg-gradient-to-b from-zinc-950 to-zinc-700 mx-auto shadow-inner border-x border-zinc-950/50" />
+              
+              {/* Metal clip */}
+              <div className="w-6 h-8 bg-gradient-to-b from-zinc-300 to-zinc-500 rounded-sm mx-auto shadow-md border-b-[3px] border-zinc-600 z-10 flex items-center justify-center">
+                <div className="w-2 h-4 bg-zinc-800 rounded-full border border-zinc-600/50 shadow-inner"></div>
+              </div>
+              
+              {/* Card holder hole */}
+              <div className="-mt-3 w-8 h-4 border-[3px] border-zinc-400 rounded-full bg-[#111] z-20 shadow-md"></div>
+              
+              {/* The actual ID Card */}
+              <div 
+                className="w-72 sm:w-80 bg-[#141414] border border-zinc-700/50 rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.7)] flex flex-col overflow-hidden relative -mt-1"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {/* Hologram / Reflection overlay */}
+                <div className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-transparent via-white/5 to-transparent opacity-50 z-20" />
+                
+                {/* Card Header */}
+                <div className="bg-zinc-900 border-b border-zinc-800 h-16 flex items-center justify-between px-6 pt-2">
+                  <div className="flex flex-col">
+                    <span className="text-[10px] text-zinc-500 font-mono tracking-widest uppercase">ID. {activeCharacter.id}</span>
+                    <span className="text-xs text-red-500 font-bold font-mono tracking-widest leading-none">METRO_SECURE_AUTH</span>
+                  </div>
+                  <ScanLine className="text-zinc-600 w-6 h-6" />
+                </div>
+                
+                {/* Visual / Portrait Area */}
+                <div className="px-6 py-5 flex items-start gap-4">
+                  <div 
+                    className={cn("w-20 h-24 bg-zinc-900 border flex items-center justify-center overflow-hidden shrink-0 filter sepia-[0.3] hue-rotate-[-30deg]", activeCharacter.imagePath ? "cursor-pointer border-zinc-500 hover:border-zinc-300 transition-colors" : "border-zinc-700")}
+                    onClick={(e) => {
+                      if (activeCharacter.imagePath) {
+                        e.stopPropagation();
+                        setViewingImage(activeCharacter.imagePath);
+                      }
+                    }}
+                  >
+                    {activeCharacter.imagePath ? <img src={activeCharacter.imagePath} alt={activeCharacter.name} className="w-full h-full object-cover transition-transform hover:scale-110" /> : <Users className="text-zinc-700 w-12 h-12" />}
+                  </div>
+                  <div className="flex flex-col gap-3 py-1">
+                    <div>
+                      <div className="text-[9px] text-zinc-500 font-mono uppercase tracking-widest mb-0.5">Name / Callsign</div>
+                      <div className="font-bold font-sans text-lg text-white leading-tight">{activeCharacter.name}</div>
+                    </div>
+                    <div>
+                      <div className="text-[9px] text-zinc-500 font-mono uppercase tracking-widest mb-0.5">Faction</div>
+                      <div className="text-sm font-sans text-amber-500/90">{activeCharacter.faction}</div>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Data Fields */}
+                <div className="px-6 pb-6 flex flex-col gap-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="border border-zinc-800 bg-zinc-950 p-2 rounded">
+                      <div className="text-[9px] text-zinc-600 font-mono uppercase tracking-widest mb-1">Role</div>
+                      <div className="text-xs text-zinc-300 font-sans">{activeCharacter.role}</div>
+                    </div>
+                    <div className="border border-zinc-800 bg-zinc-950 p-2 rounded">
+                      <div className="text-[9px] text-zinc-600 font-mono uppercase tracking-widest mb-1">Status</div>
+                      <div className={cn("text-xs font-mono font-bold tracking-tight", 
+                        activeCharacter.status.includes('HUNTED') ? 'text-blue-500' : 
+                        activeCharacter.status.includes('HUNTING') ? 'text-red-500' : 'text-zinc-300'
+                      )}>{activeCharacter.status}</div>
+                    </div>
+                  </div>
+                  
+                  <div className="border border-zinc-800 bg-zinc-950 p-3 rounded h-32 overflow-y-auto">
+                    <div className="text-[9px] text-zinc-600 font-mono uppercase tracking-widest mb-2 flex items-center gap-2">
+                       <span>Clearance Notes</span>
+                       <div className="flex-1 h-[1px] bg-zinc-800"></div>
+                    </div>
+                    <p className="text-xs text-zinc-400 font-sans leading-relaxed break-keep">
+                      {activeCharacter.desc}
+                    </p>
+                  </div>
+                  
+                  {/* Footer Bar / Barcode */}
+                  <div className="mt-2 pt-4 border-t border-zinc-800 flex justify-center items-center opacity-70">
+                    <div className="font-[barcode] font-mono text-zinc-500 tracking-[-0.2em] text-3xl" style={{fontFamily: 'monospace'}}>
+                      ||||| | ||| |||| | |||
+                    </div>
+                  </div>
+                </div>
+
+                <button 
+                  onClick={() => setActiveCharacter(null)}
+                  className="absolute top-2 right-2 text-zinc-500 hover:text-white p-2 transition-colors focus:outline-none z-30"
+                >
+                  <span className="sr-only">Close</span>
+                  <div className="w-4 h-[2px] bg-current rotate-45 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
+                  <div className="w-4 h-[2px] bg-current -rotate-45 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Full Image Overlay */}
+      <AnimatePresence>
+        {viewingImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[60] flex items-center justify-center"
+          >
+            <div 
+              className="absolute inset-0 bg-black/95 cursor-pointer backdrop-blur-md"
+              onClick={() => setViewingImage(null)}
+            />
+            <motion.img 
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0, transition: { duration: 0.2 } }}
+              src={viewingImage} 
+              alt="Full Character Portrait" 
+              className="relative z-10 max-w-[90vw] max-h-[90vh] object-contain border border-zinc-800 shadow-2xl"
+            />
+            <button 
+              onClick={() => setViewingImage(null)}
+              className="absolute top-6 right-6 text-zinc-500 hover:text-white p-2 transition-colors focus:outline-none z-20"
+            >
+              <span className="sr-only">Close</span>
+              <div className="w-6 h-[2px] bg-current rotate-45 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
+              <div className="w-6 h-[2px] bg-current -rotate-45 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
 
@@ -87,8 +340,14 @@ const TERMINOLOGY_DATA = [
   {
     term: '드라운드 은폐 (Drowned Camo)',
     type: '은폐 전술/외부 위협',
-    description: '포자에 심각하게 감염되어 지상을 배회하는 괴물들. 간혹 지하로 틈입하지만 눅눅하고 서늘한 공기 탓에 금방 떠난다. 코너에 몰린 기민한 도망자는 추적자의 열화상 스캔을 속이기 위해, 잠시 내려온 드라운드의 악취 나는 군집 속에 숨어들어가는 악몽 같은 심리전을 벌인다.',
+    description: '포자에 심각하게 감염되어 지상을 배회하는 괴물들. 간혹 지하로 틈입하지만 눅눅하고 서늘한 공기 탓에 금방 떠난다. 코너에 몰린 기민한 도망자는 추적자의 열화상 스캔을 속이기 위해, 잠시 내려온 드라운드의 악취 나는 군집 속에 무모하게 숨어들어가는 악몽 같은 심리전을 벌인다.',
     dangerLevel: 'HIGH'
+  },
+  {
+    term: '환풍구 (Ventilation Shaft)',
+    type: '이동 통로/지형',
+    description: '다른 건물의 규격과 달리 성인 여성이 겨우 기어 들어갈 수 있을 정도로 거대하게 설계된 비좁은 통로. 전력이 집중되는 시간대(12시~15시)를 제외하면 팬이 멈추기 때문에 은밀한 주요 이동 경로로 쓰인다. 하지만 추적자의 열화상 감지기에 체온이 그대로 노출되며, 퇴로가 없어 발각되면 강철 무덤이 되고 만다.',
+    dangerLevel: 'CRITICAL'
   },
   {
     term: '빈터 역 (Barren Station)',
@@ -105,7 +364,7 @@ const TERMINOLOGY_DATA = [
   {
     term: '상점 역 (Merchant Station)',
     type: '장소 분류',
-    description: '외곽 홀수 구역에 주로 위치한 작은 역. 정체를 알 수 없는 상인이 무장한 호위병들과 함께 자리잡고 있으며, 황동폐(탄피)를 물자로 교환해 준다. 암묵적 중립 구역이지만 상인의 변덕에 따라 언제든 살육의 장으로 변할 수 있다.',
+    description: '외곽 홀수 구역에 주로 위치한 작은 역. 정체를 알 수 없는 상인이 자리잡고 있으며, 황동폐(탄피)를 물자로 교환해 준다. 상인을 건드리지 않는 것이 메트로 헬의 암묵적인 규칙이다.',
     dangerLevel: 'MEDIUM'
   },
   {
@@ -203,7 +462,7 @@ const FACTIONS_DATA = [
   },
   {
     name: '블랙 마켓 (The Exchange)',
-    symbol: Crosshair,
+    symbol: DollarSign,
     territory: '외곽선 등 각 호선의 상점 역',
     description: '황동폐(탄피) 아래 모든 것을 거래하는 무자비한 자본 세력. 물자뿐만 아니라 도망자의 현상금, 노선의 노후화 비밀, 심지어 추적자의 정보까지 거래한다. 철저히 이해타산적이며, 보수가 높다면 추적자에게 도망자의 위치를 팔아넘기거나 도망자에게 살상 무기를 제공하는 기회주의의 정점이다.',
     color: 'text-emerald-500',
@@ -227,47 +486,128 @@ const FACTIONS_DATA = [
     color: 'text-blue-500',
     borderColor: 'border-blue-900/50',
     bgColor: 'bg-blue-950/30'
+  },
+  {
+    name: '퍼슈어 (Pursuers)',
+    symbol: Package,
+    territory: '외곽 폐쇄 구역 및 순환선 주변',
+    description: '아무도 접근하길 꺼리는 깊은 외곽의 버려진 구역은 물론, 오염된 지상까지 올라가 낡은 기계 부품이나 희귀 자재들을 긁어모아 다른 세력들에게 공급하는 밀수꾼 집단. 끔찍한 위험이 도사리는 외곽과 지상을 오가는 특성 탓에 이들의 동체 시력과 달리기 속도는 인간의 한계를 초월했다. 하지만 귀한 물자가 발견되면 오직 혼자 살아남기 위해 동료의 다리를 다치게 하여 처참한 미끼로 던져버리는 극악무도한 잔혹함도 지녔다.',
+    color: 'text-purple-500',
+    borderColor: 'border-purple-900/50',
+    bgColor: 'bg-purple-950/30'
   }
 ];
 
 function FactionsPage() {
-  return (
-    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="max-w-7xl mx-auto pt-16 px-6 pb-24 h-full">
-      <PageHeader title="세력 (Factions)" subtitle="권력을 쥔 자들과 반역하는 자들의 혈투" icon={ShieldAlert} />
-      
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {FACTIONS_DATA.map((faction, idx) => (
-          <motion.div
-            key={faction.name}
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: idx * 0.1 }}
-            className={cn("border bg-[#141414] p-6 md:p-8 relative group overflow-hidden transition-colors flex flex-col justify-between hover:border-zinc-600/50 min-h-[280px]", faction.borderColor, faction.bgColor)}
-          >
-            <div className="absolute -right-12 -bottom-12 opacity-[0.03] group-hover:opacity-10 transition-opacity duration-500 pointer-events-none">
-              <faction.symbol className="w-64 h-64" />
-            </div>
+  const [activeFaction, setActiveFaction] = useState<typeof FACTIONS_DATA[0] | null>(null);
 
-            <div className="flex flex-col md:flex-row md:items-center gap-4 mb-6 relative z-10">
-              <div className={cn("p-3 border rounded-md shrink-0 w-fit", faction.borderColor, faction.bgColor.replace('/30', '/50'))}>
-                <faction.symbol className={cn("w-8 h-8", faction.color)} />
+  // Esc key closure
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setActiveFaction(null);
+    };
+    window.addEventListener('keydown', handleEsc);
+    return () => window.removeEventListener('keydown', handleEsc);
+  }, []);
+
+  return (
+    <>
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="max-w-7xl mx-auto pt-16 px-6 pb-24 h-full relative z-10 flex flex-col items-center">
+        <PageHeader title="세력 (Factions)" subtitle="권력을 쥔 자들과 반역하는 자들의 혈투" icon={ShieldAlert} />
+        
+        <div className="flex-1 w-full flex items-center justify-center min-h-[50vh] mt-8">
+          <div className="flex flex-wrap items-center justify-center gap-8 md:gap-16 max-w-4xl mx-auto">
+            {FACTIONS_DATA.map((faction, idx) => (
+              <motion.button
+                key={faction.name}
+                initial={{ opacity: 0, scale: 0.5, rotate: -30 }}
+                animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                transition={{ delay: idx * 0.1, type: "spring", stiffness: 100 }}
+                whileHover={{ scale: 1.15, rotate: 5 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setActiveFaction(faction)}
+                className={cn("relative group p-8 md:p-10 rounded-full border flex items-center justify-center transition-all duration-300 focus:outline-none shadow-xl hover:border-opacity-100", faction.bgColor, faction.borderColor)}
+              >
+                {/* Glow layer */}
+                <div className={cn("absolute inset-0 rounded-full blur-2xl opacity-20 group-hover:opacity-40 transition-opacity duration-500", faction.bgColor.replace('/30', ''))} />
+                
+                {/* Pulse ring on hover */}
+                <div className={cn("absolute inset-[-15px] rounded-full border scale-90 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-500", faction.borderColor)} />
+                
+                <faction.symbol className={cn("w-12 h-12 md:w-16 md:h-16 transition-colors duration-300 relative z-10 group-hover:text-white", faction.color)} />
+              </motion.button>
+            ))}
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Detail Modal */}
+      <AnimatePresence>
+        {activeFaction && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center px-4"
+          >
+            {/* Backdrop */}
+            <div 
+              className="absolute inset-0 bg-black/90 backdrop-blur-sm cursor-pointer"
+              onClick={() => setActiveFaction(null)}
+            />
+            
+            {/* Modal Content */}
+            <motion.div
+              initial={{ scale: 0.95, y: 20, opacity: 0 }}
+              animate={{ scale: 1, y: 0, opacity: 1 }}
+              exit={{ scale: 0.95, y: 20, opacity: 0, transition: { duration: 0.2 } }}
+              className={cn("relative w-full max-w-2xl border p-8 md:p-10 shadow-2xl overflow-hidden", activeFaction.borderColor, activeFaction.bgColor.replace('/30', '/10'))}
+              onClick={e => e.stopPropagation()}
+            >
+              <div className={cn("absolute inset-0 opacity-10 blur-[100px] pointer-events-none", activeFaction.bgColor.replace('/30', ''))} />
+
+              <div className="absolute -right-16 -bottom-16 opacity-[0.05] pointer-events-none">
+                <activeFaction.symbol className={cn("w-96 h-96", activeFaction.color)} />
               </div>
-              <div>
-                <h3 className="text-2xl font-bold text-white font-sans tracking-tight mb-2">{faction.name}</h3>
-                <div className="text-sm font-sans text-zinc-300 flex items-center gap-2">
-                  <MapPin className="w-3.5 h-3.5 text-red-500" />
-                  {faction.territory}
+
+              <div className="flex flex-col md:flex-row md:items-start gap-6 mb-8 relative z-10">
+                <div className={cn("p-4 border shrink-0 bg-zinc-950/80 rounded-sm", activeFaction.borderColor)}>
+                  <activeFaction.symbol className={cn("w-12 h-12", activeFaction.color)} />
+                </div>
+                <div className="pt-2">
+                  <h3 className="text-3xl font-bold text-white font-sans tracking-tight mb-3">{activeFaction.name}</h3>
+                  <div className={cn("inline-flex items-center gap-2 px-3 py-1.5 border rounded-sm text-sm font-sans text-zinc-300 shadow-inner", activeFaction.borderColor, activeFaction.bgColor.replace('/30', '/40'))}>
+                    <MapPin className="w-4 h-4" />
+                    {activeFaction.territory}
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <p className="text-zinc-400 text-sm leading-relaxed font-sans relative z-10 break-keep">
-              {faction.description}
-            </p>
+              <div className={cn("relative z-10 border p-6 rounded-sm shadow-md", activeFaction.bgColor.replace('/30', '/20'), activeFaction.borderColor)}>
+                <div className={cn("text-[10px] font-mono tracking-widest uppercase mb-4 flex items-center gap-2", activeFaction.color)}>
+                  <ScanLine className="w-3.5 h-3.5" />
+                  <span className="opacity-80">Faction Intel [Classified]</span>
+                  <div className="flex-1 h-px ml-2 opacity-30" style={{ backgroundColor: 'currentColor' }} />
+                </div>
+                <p className="text-zinc-300 text-sm md:text-base leading-relaxed font-sans break-keep">
+                  {activeFaction.description}
+                </p>
+              </div>
+
+              {/* Close Button */}
+              <button 
+                onClick={() => setActiveFaction(null)}
+                className="absolute top-4 right-4 text-zinc-500 hover:text-white p-2 transition-colors focus:outline-none z-30"
+              >
+                <span className="sr-only">Close</span>
+                <div className="w-5 h-[2px] bg-current rotate-45 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
+                <div className="w-5 h-[2px] bg-current -rotate-45 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
+              </button>
+            </motion.div>
           </motion.div>
-        ))}
-      </div>
-    </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
 
@@ -300,13 +640,34 @@ const METRO_LINES = Array.from({ length: 14 }).map((_, i) => {
     // adding some wobble so the line isn't perfectly straight
     const radius = 60 + j * radSteps + ((i * j) % 15); 
     const curveAngle = angle + (Math.sin(j) * 0.1);
-    const isAbandoned = (i * 13 + j * 17) % 10 > 6;
+    
+    // 나선 모양으로 폐쇄된 구역 배치 (i: 각도, j: 반지름)
+    const isAbandoned = (i * 2 - j * 3 + 42) % 14 < 2;
     
     let typeIndex = (i * 11 + j * 31) % STATION_TYPES.length;
     // 상점 역 (index 2)은 홀수 구역(1, 3, 5 등)에만 등장 가능. j+1이 짝수이면 다른 역으로 변경.
     if (typeIndex === 2 && (j + 1) % 2 === 0) {
       typeIndex = (typeIndex + 1) % STATION_TYPES.length;
     }
+    
+    // 1호선, 7호선, 11호선이 아닌 곳의 상점 역(2)은 빈터 역(0)으로 변경.
+    if (typeIndex === 2 && ![1, 7, 11].includes(lineNum)) {
+      typeIndex = 0;
+    }
+    
+    // 11호선 제1구역은 빈터 역으로 교체
+    if (lineNum === 11 && j === 0) {
+      typeIndex = 0;
+    }
+    
+    // 기둥 역(3)은 마지막 구역 한 칸 뒤(numStations - 2)에만 배치
+    if (j === numStations - 2) {
+      typeIndex = 3;
+    } else if (typeIndex === 3) {
+      // 그 외의 기둥 역은 빈터 역(0) 또는 폐철 역(5)으로 변경
+      typeIndex = (i + j) % 2 === 0 ? 0 : 5;
+    }
+
     const stationType = STATION_TYPES[typeIndex];
     
     return {
@@ -333,8 +694,63 @@ const METRO_LINES = Array.from({ length: 14 }).map((_, i) => {
 const OUTER_RING_PATH = `M ${METRO_LINES[0].stations[METRO_LINES[0].stations.length - 1].x} ${METRO_LINES[0].stations[METRO_LINES[0].stations.length - 1].y} ` +
   METRO_LINES.slice(1).map(line => `L ${line.stations[line.stations.length - 1].x} ${line.stations[line.stations.length - 1].y}`).join(' ') + ' Z';
 
+type VentRoute = {
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
+  isOuterRing?: boolean;
+  description: string;
+};
+
+const VENT_ROUTES: VentRoute[] = [];
+METRO_LINES.forEach((line, i) => {
+  const nextLine = METRO_LINES[(i + 1) % 14];
+  const prevLine = METRO_LINES[(i + 13) % 14];
+  
+  line.stations.forEach((st, j) => {
+    // 같은 호선 내 인접 역 연결
+    if (j < line.stations.length - 1 && (i * 7 + j * 11) % 3 !== 0) {
+      VENT_ROUTES.push({ 
+        x1: st.x, y1: st.y, 
+        x2: line.stations[j+1].x, y2: line.stations[j+1].y,
+        description: `제 ${line.num}호선 구역을 잇는 직통 환풍망. 일직선으로 뻗어있어 이동은 빠르나, 내부가 좁아 기어가는 도중 발각되면 피할 곳이 없는 치명적 함정이 된다.`
+      });
+    }
+    // 다음 호선과 연결
+    if (j < nextLine.stations.length && (i * 13 + j * 17) % 4 === 0) {
+      VENT_ROUTES.push({ 
+        x1: st.x, y1: st.y, 
+        x2: nextLine.stations[j].x, y2: nextLine.stations[j].y,
+        description: `호선과 호선 사이를 가로지르는 불규칙한 횡단 배관. 붕괴 위험이 있으며, 교차 지점에 고인 습기 탓에 미끄러져 추락하거나 소음을 발생시키기 쉽다.`
+      });
+    }
+    // 이전 호선의 이전 역과 나선형 연결
+    if (j > 0 && j - 1 < prevLine.stations.length && (i * 3 + j * 19) % 9 === 0) {
+      VENT_ROUTES.push({ 
+        x1: st.x, y1: st.y, 
+        x2: prevLine.stations[j-1].x, y2: prevLine.stations[j-1].y,
+        description: `숨겨진 낡은 환기통. 사냥개들의 기본 수색망에서는 벗어나 있지만, 한 번 들어가면 방향 감각을 상실할 정도로 내부 구조가 복잡하게 얽혀있다.`
+      });
+    }
+
+    // 외곽 순환선 환풍망 (가장 외곽 역들 연결)
+    if (j === line.stations.length - 1) {
+      const nextOuterSt = nextLine.stations[nextLine.stations.length - 1];
+      // 중복 방지를 위해 외곽선은 전체를 한 바퀴 연결
+      VENT_ROUTES.push({
+        x1: st.x, y1: st.y,
+        x2: nextOuterSt.x, y2: nextOuterSt.y,
+        isOuterRing: true,
+        description: `외곽 순환 구역을 따라 흐르는 거대 폐쇄 환풍로. 포자 감염 위험이 극치에 달해 추적자조차 접근을 꺼리나, 퍼슈어(Pursuers)들의 은밀한 주 이동 경로로 쓰인다.`
+      });
+    }
+  });
+});
+
 function LocationsPage() {
   const [hoveredNode, setHoveredNode] = useState<{name: string, desc: string, status: string} | null>(null);
+  const [viewMode, setViewMode] = useState<'lines' | 'vents'>('lines');
 
   const activeInfo = hoveredNode || {
     name: '종착역 (Terminus)',
@@ -352,23 +768,72 @@ function LocationsPage() {
         <div className="flex-1 rounded-xl border border-zinc-800 bg-[#0c0c0c] relative overflow-hidden shadow-2xl shadow-black/50 aspect-square md:aspect-auto min-h-[500px]">
           <div className="absolute inset-0 pointer-events-none opacity-10 bg-[linear-gradient(transparent_50%,rgba(0,0,0,0.5)_50%)] bg-[length:100%_4px] z-20"></div>
           
-          <div className="absolute top-4 left-4 z-30 bg-[#0a0a0a]/80 border border-zinc-800 p-3 rounded-lg text-xs font-mono backdrop-blur-sm pointer-events-none">
-            <h4 className="text-zinc-500 mb-2 border-b border-zinc-800 pb-1 tracking-widest uppercase">Icon Legend</h4>
-            <div className="flex flex-col gap-1.5">
-              {STATION_TYPES.map(st => (
-                <div key={st.type} className="flex items-center gap-3">
-                  <span className="text-amber-500 font-bold w-4 text-center">{st.symbol}</span>
-                  <span className="text-zinc-400">{st.type}</span>
-                </div>
-              ))}
+          <div className="absolute top-4 left-4 z-30 flex flex-col gap-4">
+            {/* Toggle Mode */}
+            <div className="flex bg-[#0a0a0a]/80 border border-zinc-800 rounded-lg overflow-hidden shrink-0 backdrop-blur-sm shadow-xl w-fit">
+               <button 
+                 className={cn("px-4 py-2 text-xs font-mono tracking-widest transition-colors", viewMode === 'lines' ? 'bg-zinc-800 text-white' : 'text-zinc-500 hover:text-zinc-300')} 
+                 onClick={() => setViewMode('lines')}
+               >
+                 호선
+               </button>
+               <button 
+                 className={cn("px-4 py-2 text-xs font-mono tracking-widest transition-colors border-l border-zinc-800", viewMode === 'vents' ? 'bg-zinc-800 text-white' : 'text-zinc-500 hover:text-zinc-300')} 
+                 onClick={() => setViewMode('vents')}
+               >
+                 환풍구
+               </button>
             </div>
+
+            <AnimatePresence>
+              {viewMode === 'lines' && (
+                <motion.div 
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="bg-[#0a0a0a]/80 border border-zinc-800 p-3 rounded-lg text-xs font-mono backdrop-blur-sm shadow-xl w-fit overflow-hidden"
+                >
+                  <h4 className="text-zinc-500 mb-2 border-b border-zinc-800 pb-1 tracking-widest uppercase pointer-events-none">Icon Legend</h4>
+                  <div className="flex flex-col gap-1.5">
+                    {STATION_TYPES.map(st => (
+                      <div 
+                        key={st.type} 
+                        className="flex items-center gap-3 cursor-help hover:bg-zinc-800/80 p-1 -mx-1 rounded transition-colors"
+                        onMouseEnter={() => setHoveredNode({
+                          name: `${st.symbol} ${st.type}`,
+                          desc: st.detail,
+                          status: '기호 안내 (Legend)'
+                        })}
+                        onMouseLeave={() => setHoveredNode(null)}
+                      >
+                        <span className="text-amber-500 font-bold w-4 text-center pointer-events-none">{st.symbol}</span>
+                        <span className="text-zinc-400 pointer-events-none">{st.type}</span>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
           
           <svg viewBox="0 0 800 800" className="w-full h-full bg-[#0c0c0c]">
-            {/* Background Rings */}
-            {RADAR_RINGS.map(r => (
-              <circle key={r} cx="400" cy="400" r={r} fill="none" stroke="#27272a" strokeWidth="1" strokeDasharray="4 4" className="pointer-events-none" />
-            ))}
+            <defs>
+              <style>{`
+                @keyframes vent-flow {
+                  to { stroke-dashoffset: -20; }
+                }
+                .vent-duct {
+                  stroke-dasharray: 8 6;
+                  animation: vent-flow 15s linear infinite;
+                }
+              `}</style>
+            </defs>
+
+            <g className={cn("transition-all duration-700", viewMode === 'vents' ? 'opacity-20 grayscale blur-[2px] pointer-events-none' : 'opacity-100')}>
+              {/* Background Rings */}
+              {RADAR_RINGS.map(r => (
+                <circle key={r} cx="400" cy="400" r={r} fill="none" stroke="#27272a" strokeWidth="1" strokeDasharray="4 4" className="pointer-events-none" />
+              ))}
             
             {/* Axis Lines */}
             <g className="pointer-events-none opacity-50">
@@ -460,13 +925,55 @@ function LocationsPage() {
 
             {/* Terminus (Center) */}
             <g 
-              className="cursor-pointer" 
+              className={cn("cursor-pointer", viewMode === 'lines' ? 'pointer-events-auto' : 'pointer-events-none')}
               onMouseEnter={() => setHoveredNode(null)}
             >
               <circle cx="400" cy="400" r="16" fill="#09090b" stroke="#ef4444" strokeWidth="2" className="animate-pulse" />
               <circle cx="400" cy="400" r="6" fill="#ef4444" />
               <text x="424" y="405" fill="#ef4444" className="font-mono text-[14px] tracking-widest font-bold filter drop-shadow opacity-90 pointer-events-none">종착역</text>
               <text x="424" y="420" fill="#a1a1aa" className="font-mono text-[10px] tracking-widest pointer-events-none">TERMINUS_00</text>
+            </g>
+            </g>
+
+            {/* Ventilation Shafts Layer */}
+            <g className={cn("transition-all duration-700", viewMode === 'vents' ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none')}>
+              {VENT_ROUTES.map((route, i) => (
+                <g 
+                  key={`vent-group-${i}`}
+                  className="cursor-crosshair"
+                  onMouseEnter={() => setHoveredNode({
+                    name: route.isOuterRing ? "순환로 폐쇄 환기망" : "내부 환풍 경로",
+                    desc: route.description,
+                    status: route.isOuterRing ? "EXTREME DANGER" : "CRITICAL PATH"
+                  })}
+                  onMouseLeave={() => setHoveredNode(null)}
+                >
+                  {/* Invisible thicker line for easier hovering */}
+                  <line 
+                    x1={route.x1} y1={route.y1} 
+                    x2={route.x2} y2={route.y2} 
+                    stroke="transparent" 
+                    strokeWidth="12" 
+                  />
+                  <line 
+                    x1={route.x1} y1={route.y1} 
+                    x2={route.x2} y2={route.y2} 
+                    stroke={route.isOuterRing ? "#ef4444" : "#8b5cf6"} 
+                    strokeWidth="2" 
+                    className={cn("vent-duct transition-all duration-300 hover:opacity-100", route.isOuterRing ? "opacity-90 stroke-[3px]" : "opacity-60")} 
+                    style={{ filter: route.isOuterRing ? 'drop-shadow(0 0 8px rgba(239,68,68,0.9))' : 'drop-shadow(0 0 6px rgba(139,92,246,0.8))' }}
+                  />
+                </g>
+              ))}
+              {METRO_LINES.map(line => line.stations.map(st => (
+                <circle 
+                  key={`vent-node-${st.id}`}
+                  cx={st.x} cy={st.y}
+                  r="3.5"
+                  fill="#c4b5fd"
+                  className="opacity-90 drop-shadow-[0_0_8px_rgba(139,92,246,1)] pointer-events-none"
+                />
+              )))}
             </g>
           </svg>
         </div>
@@ -704,9 +1211,88 @@ function AppContent() {
   );
 }
 
+function LoadingScreen() {
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    const duration = 2500;
+    const interval = 30;
+    const step = 100 / (duration / interval);
+    
+    const timer = setInterval(() => {
+      setProgress(p => {
+        if (p >= 100) {
+          clearInterval(timer);
+          return 100;
+        }
+        return p + step;
+      });
+    }, interval);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <motion.div 
+      initial={{ opacity: 1 }}
+      exit={{ opacity: 0, transition: { duration: 0.8, ease: "easeInOut" } }}
+      className="fixed inset-0 z-[100] bg-zinc-950 flex flex-col items-center justify-center overflow-hidden"
+    >
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(239,68,68,0.1)_0%,rgba(0,0,0,1)_80%)]" />
+
+      {/* Glitchy Text */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9, letterSpacing: '0.1em' }}
+        animate={{ opacity: 1, scale: 1, letterSpacing: '0.3em' }}
+        transition={{ duration: 1.5, ease: "easeOut" }}
+        className="relative z-10 text-center"
+      >
+        <h1 className="text-5xl md:text-7xl font-mono font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-800 drop-shadow-[0_0_15px_rgba(239,68,68,0.5)]">
+          METRO_HELL
+        </h1>
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.8, duration: 1 }}
+          className="text-zinc-500 font-mono text-sm mt-4 uppercase tracking-widest text-center"
+        >
+          Initializing sub-systems...
+        </motion.p>
+      </motion.div>
+
+      {/* Loading Bar */}
+      <div className="absolute bottom-0 left-0 w-full z-10 flex flex-col">
+        <div className="flex justify-between items-center px-6 pb-2 font-mono text-[10px] sm:text-xs text-zinc-600 uppercase tracking-widest">
+           <span>System Boot</span>
+           <span>{Math.floor(progress)}%</span>
+        </div>
+        <div className="w-full h-1 bg-zinc-900 overflow-hidden">
+          <motion.div 
+            className="h-full bg-red-600 shadow-[0_0_10px_rgba(239,68,68,1)]"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
 export default function App() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // 3 seconds loading
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <BrowserRouter>
+      <AnimatePresence>
+        {isLoading && <LoadingScreen key="loading" />}
+      </AnimatePresence>
       <div className="min-h-screen bg-neutral-950 text-neutral-300 font-sans selection:bg-red-500/30 selection:text-red-200">
         {/* Global vignette effect for Noir feel */}
         <div className="pointer-events-none fixed inset-0 z-50 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.8)_100%)] opacity-80" />
