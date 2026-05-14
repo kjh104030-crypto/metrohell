@@ -45,46 +45,183 @@ function SectionSkeleton() {
 }
 
 const CHARACTERS_DATA = [
+  // 상인 (Black Market)
   {
-    id: 'C-01',
+    id: 'M-01',
+    name: '아리 (Ari)',
+    role: '1호선 3구역 상인',
+    faction: '블랙 마켓',
+    status: '잔꾀많은, 예리한',
+    desc: '분홍색 양갈래 머리와 벽안을 지닌 여성이다. 잔꾀가 많고 예리하며 영악하고 영리한 성격을 지녔다. 상인으로서 철저히 물질주의적인 사고를 하지만, 가끔은 느슨하게 풀어지는 모습도 보여준다.',
+    dangerLevel: 'MEDIUM',
+    imageType: 'MERCHANT'
+  },
+  {
+    id: 'M-02',
+    name: '에리 (Eri)',
+    role: '7호선 3구역 상인',
+    faction: '블랙 마켓',
+    status: '차분한, 도도한',
+    desc: '노란색이 섞인 검은 머리와 노란색 눈을 지닌 여성이다. 도도하고 차분하며 자신의 감정을 숨기는 데 능통하다. 기본적으로 존댓말을 사용하는 상인으로, 매사에 무감각한 태도를 보인다.',
+    dangerLevel: 'MEDIUM',
+    imageType: 'MERCHANT'
+  },
+  {
+    id: 'M-03',
+    name: '알 (Al)',
+    role: '11호선 7구역 상인',
+    faction: '블랙 마켓',
+    status: '차분한, 감정을 숨기는',
+    desc: '긴 백발에 노란색 눈을 지닌 여성이다. 감정을 완벽히 숨기는 차분함과 고지식하며 차가운 성격을 지녔다. 존댓말을 사용하며, 너무 효율적이라 차갑게 느껴지는 거래 방식을 고수하는 상인이다.',
+    dangerLevel: 'MEDIUM',
+    imageType: 'MERCHANT'
+  },
+
+  // 정화조
+  {
+    id: 'P-01',
     name: '일라이 (Eli)',
-    role: '전직 배관공 / 도망자',
-    faction: '무소속',
-    status: '추적당하는 중 (HUNTED)',
-    desc: '지하의 환풍구와 배관 구조를 완벽하게 파악하고 있는 생존자. 빛의 교단이 숨기고 있던 노후화된 배수로의 치명적 결함을 발견한 후 사냥의 표적이 되었다.',
+    role: '방화범',
+    faction: '정화조',
+    status: '활발한, 방정맞은',
+    desc: '울프컷 흑발에 주황색과 보라색 오드아이를 지닌 여성이다. 평소 활발하다 못해 시끄럽고 방정맞은 성격을 띠고 있다. 반말을 내뱉는 방화범으로, 온전히 자신의 재미만을 위해 움직이는 인물이다.',
     dangerLevel: 'CRITICAL',
     imageType: 'SURVIVOR',
     imagePath: 'https://i.postimg.cc/Ls2DQyjS/jemog-eul-iblyeoghaejuseyo-(4).png'
   },
   {
-    id: 'C-02',
-    name: '하운드-07 (Hound-07)',
-    role: '이단 심문관',
-    faction: '빛의 교단',
-    status: '추적 중 (HUNTING)',
-    desc: '감정을 제거당한 채 오직 사냥만을 위해 훈련된 빛의 교단의 정예 추적자. 소음기가 장착된 저격총과 열화상 감지기로 완전한 어둠 속에서 목표를 유린한다.',
-    dangerLevel: 'EXTREME',
-    imageType: 'HUNTER'
-  },
-  {
-    id: 'C-03',
-    name: '마담 티 (Madame T)',
-    role: '상단 주도자',
-    faction: '블랙 마켓',
-    status: '관망 중 (NEUTRAL)',
-    desc: '탄피 하나에 목숨표 하나를 거래하는 지하 세계의 대상인. 그 누구도 그녀의 진짜 얼굴을 10초 이상 본 적이 없으며, 항상 두꺼운 방진 마스크 뒤에 숨어 있다.',
-    dangerLevel: 'MEDIUM',
-    imageType: 'MERCHANT'
-  },
-  {
-    id: 'C-04',
-    name: '크로우 (Crow)',
-    role: '길잡이',
-    faction: '맥박 감시자',
-    status: '도주 지원 (SUPPORT)',
-    desc: '소리만으로 모든 움직임을 파악해내는 정보조직의 말단. 과거 사냥개들의 이명 함정에 걸려 청력을 일부 잃었지만, 뼈의 진동으로 선로의 맥박을 읽어낸다.',
+    id: 'P-02',
+    name: '페그라 (Pegra)',
+    role: '방화범',
+    faction: '정화조',
+    status: '무감각한',
+    desc: '긴 흑발과 안광이 없는 백안을 지닌 여성이다. 감정이라는 것을 느끼지 못해 한없이 무감각하고 무감정하다. 존댓말을 사용하는 방화범이며, 편도체 미발달로 인해 타인의 고통에 전혀 공감하지 못하는 사이코패스적인 사고를 지니고 있다.',
     dangerLevel: 'HIGH',
-    imageType: 'SCOUT'
+    imageType: 'PURIFIER'
+  },
+  {
+    id: 'P-03',
+    name: '산세 (Sanse)',
+    role: '방화범',
+    faction: '정화조',
+    status: '권태로운',
+    desc: '적발과 녹안, 짙은 다크서클을 지닌 여성이다. 항상 느긋하고 권태로워 보이지만 내면은 몹시 불안정하다. 과거 산불로 가족을 모두 잃은 후 세상의 모든 것을 불태우기로 다짐한 방화범이자 골초 애연가이다.',
+    dangerLevel: 'HIGH',
+    imageType: 'PURIFIER'
+  },
+
+  // 퍼슈어
+  {
+    id: 'PR-01',
+    name: '제인 호너 (Jane Horner)',
+    role: '생존주의자',
+    faction: '퍼슈어',
+    status: '차분한, 예민한',
+    desc: '노란색 장발과 자안을 지닌 여성이다. 차분하고 효율적이지만 동시에 예민한 성격을 가졌다. 메트로 헬에 오기 전 가족을 잃은 아픔이 있으며, 철저한 생존주의를 내세우며 반말을 사용하는 사기꾼이다.',
+    dangerLevel: 'HIGH',
+    imageType: 'PURSUER'
+  },
+  {
+    id: 'PR-02',
+    name: '베일 (Bale)',
+    role: '생존주의자',
+    faction: '퍼슈어',
+    status: '까칠한, 감정적인',
+    desc: '파란빛이 감도는 짧은 흑발과 청안을 지닌 여성이다. 매사에 까칠하게 반응하며 감정적이다. 과거 동생과 생이별한 후 메트로 헬 곳곳을 뒤지며 동생을 찾아다니는 중이며, 반말을 쓰는 강도 전과자이다.',
+    dangerLevel: 'HIGH',
+    imageType: 'PURSUER'
+  },
+  {
+    id: 'PR-03',
+    name: '알토 (Alto)',
+    role: '생존주의자',
+    faction: '퍼슈어',
+    status: '활발한, 능글맞은',
+    desc: '갈색 포니테일 머리와 녹안을 지닌 여성이다. 겉보기엔 매우 활발하고 매사에 긍정적이며 능글맞다. 하지만 실상은 가학적인 취향을 숨기고 반말을 서슴없이 사용하는 살인범이다.',
+    dangerLevel: 'CRITICAL',
+    imageType: 'PURSUER'
+  },
+  {
+    id: 'PR-04',
+    name: '캐서린 (Catherine)',
+    role: '생존주의자',
+    faction: '퍼슈어',
+    status: '고집있는',
+    desc: '곱슬거리는 노란 장발과 청안을 지닌 여성이다. 활동적이고 몹시 활발하지만 자기 고집이 대단히 강하다. 메트로 헬에 오기 직전 자신의 애인을 제 손으로 살해했으며, 자신만의 확고한 기준을 들이대며 반말을 일삼는다.',
+    dangerLevel: 'CRITICAL',
+    imageType: 'PURSUER'
+  },
+  {
+    id: 'PR-05',
+    name: '초르니 (Chorny)',
+    role: '전 특수부대',
+    faction: '퍼슈어',
+    status: '예리한, 차가운',
+    desc: '어두운 흑발과 대비되는 차가운 벽안을 지닌 여성이다. 세상을 비관적으로 바라보며 늘 예리하고 서늘한 태도를 유지한다. 전직 특수부대 출신의 애연가이며, 누구에게나 묘하게 반존대를 섞어 쓴다.',
+    dangerLevel: 'EXTREME',
+    imageType: 'PURSUER'
+  },
+
+  // 오큘러리스
+  {
+    id: 'O-01',
+    name: '이스카 (Iska)',
+    role: '지도자',
+    faction: '오큘러리스',
+    status: '교활한, 영악한',
+    desc: '적발과 황안을 지닌 여성이다. 오큘러리스를 통치하는 지도자로 끝없이 이기적이고 영악하며 교활하다. 타인의 목숨을 하찮게 여기는 살인마이자 사기꾼이지만, 놀라운 카리스마와 언변으로 사람들의 생각을 자신과 동화시키는 능력을 가졌다.',
+    dangerLevel: 'EXTREME',
+    imageType: 'OCULARIS'
+  },
+  {
+    id: 'O-02',
+    name: '에이브러헴 (Abraham)',
+    role: '전 소방관',
+    faction: '오큘러리스',
+    status: '차가운, 개인주의',
+    desc: '짧은 백발과 흑안을 지닌 남성이다. 철저한 개인주의자로서 차갑고 영리하게 행동한다. 전직 소방관 출신으로 메트로 헬에서는 드물게 인간적인 면모를 지니고 있으며, 지도자 이스카의 잔혹한 정치를 내심 싫어한다.',
+    dangerLevel: 'HIGH',
+    imageType: 'OCULARIS'
+  },
+  {
+    id: 'O-03',
+    name: '큐에라 (Quera)',
+    role: '조직원',
+    faction: '오큘러리스',
+    status: '경쟁심 강한',
+    desc: '흑발과 주황색 눈을 지닌 여성이다. 매사에 긍정적이고 도전적이며 지독한 경쟁심을 불태운다. 베일의 잃어버린 친동생이지만 정작 본인은 그 기억을 잃었으며, 이스카의 피도 눈물도 없는 정치를 싫어하지 않는다.',
+    dangerLevel: 'HIGH',
+    imageType: 'OCULARIS'
+  },
+  {
+    id: 'O-04',
+    name: '키라 (Kira)',
+    role: '조직원',
+    faction: '오큘러리스',
+    status: '활발한, 능글맞은',
+    desc: '하늘색 머리와 청안을 지닌 여성이다. 웃는 얼굴이라 긍정적이고 능글맞아 보이지만, 타인의 고통을 즐기는 가학적인 살인범이다. 제멋대로 반말을 쓴다.',
+    dangerLevel: 'CRITICAL',
+    imageType: 'OCULARIS'
+  },
+  {
+    id: 'O-05',
+    name: '몰 (Mol)',
+    role: '조직원',
+    faction: '오큘러리스',
+    status: '활발한, 능글맞은',
+    desc: '단발의 갈색 머리와 분홍색 눈을 지닌 여성이다. 긍정적이고 능글맞은 태도를 달고 산다. 가학적인 취향을 가진 사기꾼이며 주변 사람들에게 함부로 반말을 지껄인다.',
+    dangerLevel: 'HIGH',
+    imageType: 'OCULARIS'
+  },
+  {
+    id: 'O-06',
+    name: '차란챠 (Charancha)',
+    role: '조직원',
+    faction: '오쿨러리스',
+    status: '활발한, 능글맞은',
+    desc: '갈색 히메컷 스타일에 안광 없는 백안을 지닌 여성이다. 언제나 활발하고 능청스러우며 지나치게 긍정적인 태도를 유지한다. 타인을 괴롭히는 데서 쾌감을 느끼는 잔혹한 살인범이며 뻔뻔하게 반말을 구사한다.',
+    dangerLevel: 'CRITICAL',
+    imageType: 'OCULARIS'
   }
 ];
 
@@ -112,31 +249,45 @@ function CharactersPage() {
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="max-w-7xl mx-auto pt-16 px-6 pb-24 h-full relative z-10">
         <PageHeader title="등장인물 (Characters)" subtitle="생존자, 추적자, 그리고 도망자들의 기록" icon={Users} />
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {CHARACTERS_DATA.map((char, i) => (
-            <motion.div 
-              key={char.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
-              onClick={() => setActiveCharacter(char)}
-              className="group cursor-pointer border border-zinc-800 bg-[#141414] p-4 flex flex-col items-center justify-center aspect-[3/4] hover:border-zinc-500 transition-colors relative overflow-hidden"
-            >
-              {/* Background gradient on hover */}
-              <div className="absolute inset-0 bg-gradient-to-t from-red-950/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-              
-              <div className="w-24 h-24 mb-6 rounded-full bg-zinc-900 border-2 border-zinc-800 flex items-center justify-center overflow-hidden">
-                {char.imagePath ? <img src={char.imagePath} alt={char.name} className="w-full h-full object-cover" /> : <Users className="w-10 h-10 text-zinc-700" />}
-              </div>
-              <h3 className="font-sans font-bold text-lg text-zinc-200 uppercase tracking-widest">{char.name}</h3>
-              <p className="text-zinc-500 font-mono text-xs mt-2">{char.id}</p>
-              
-              <div className="mt-4 px-3 py-1 bg-zinc-900 border border-zinc-800 text-[10px] font-mono tracking-widest text-zinc-400">
-                조회 가능 (CLICK TO VIEW)
-              </div>
-            </motion.div>
-          ))}
-        </div>
+        {Object.entries(
+          CHARACTERS_DATA.reduce((acc, char) => {
+            if (!acc[char.faction]) acc[char.faction] = [];
+            acc[char.faction].push(char);
+            return acc;
+          }, {} as Record<string, typeof CHARACTERS_DATA>)
+        ).map(([faction, characters]) => (
+          <div key={faction} className="mb-16">
+            <h2 className="text-2xl font-bold font-sans tracking-widest uppercase mb-6 text-zinc-200 border-b border-zinc-800/50 pb-3 flex items-center gap-3">
+              <span className="w-2 h-2 bg-red-500 rounded-full" />
+              {faction}
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {characters.map((char, i) => (
+                <motion.div 
+                  key={char.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.1 }}
+                  onClick={() => setActiveCharacter(char)}
+                  className="group cursor-pointer border border-zinc-800 bg-[#141414] p-4 flex flex-col items-center justify-center aspect-[3/4] hover:border-zinc-500 transition-colors relative overflow-hidden"
+                >
+                  {/* Background gradient on hover */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-red-950/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  
+                  <div className="w-24 h-24 mb-6 rounded-full bg-zinc-900 border-2 border-zinc-800 flex items-center justify-center overflow-hidden">
+                    {char.imagePath ? <img src={char.imagePath} alt={char.name} className="w-full h-full object-cover" /> : <Users className="w-10 h-10 text-zinc-700" />}
+                  </div>
+                  <h3 className="font-sans font-bold text-lg text-zinc-200 uppercase tracking-widest">{char.name}</h3>
+                  <p className="text-zinc-500 font-mono text-xs mt-2">{char.id}</p>
+                  
+                  <div className="mt-4 px-3 py-1 bg-zinc-900 border border-zinc-800 text-[10px] font-mono tracking-widest text-zinc-400">
+                    조회 가능 (CLICK TO VIEW)
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        ))}
       </motion.div>
 
       {/* ID Card Overlay Modal */}
@@ -443,22 +594,13 @@ function TerminologyPage() {
 
 const FACTIONS_DATA = [
   {
-    name: '빛의 교단 (Order of Lumina)',
+    name: '오큘러리스 (Ocularis)',
     symbol: Eye,
-    territory: '종착역 (Terminus) 및 1, 2호선',
-    description: '전력이 회복되는 12~15시의 "빛"을 신성시하는 광신도 집단. 지하의 시스템 코어를 장악하고 전력을 통제한다. 규율을 어기거나 불복종하는 자들을 이단으로 몰아 무자비하게 사냥하며, 이들의 이단 심문관(사냥개)들은 소음기가 장착된 정밀 소총과 야간 투시경으로 어둠 속의 사냥을 즐긴다.',
+    territory: '3호선',
+    description: '3호선을 통째로 거점으로 삼은 세력. 메트로 헬에서 가장 거대한 세력중 하나. 지도자 이스카.',
     color: 'text-amber-400',
     borderColor: 'border-amber-900/50',
     bgColor: 'bg-amber-950/30'
-  },
-  {
-    name: '녹슨 이빨 (Rusty Fangs)',
-    symbol: Skull,
-    territory: '7, 8, 9호선 폐철 역 중심',
-    description: '폭력과 약탈로 연명하는 잔혹한 갱단. 규율은 오직 피의 복수뿐. 화기보다는 폐철로 직접 만든 육중한 근접 무기와 급조 폭발물을 애용하며, 그들의 영역에 발을 들인 도망자는 사냥당하는 내내 쇠붙이가 끌리는 소리와 짐승 같은 울음소리에 시달리다 신경쇠약에 빠지게 된다.',
-    color: 'text-red-500',
-    borderColor: 'border-red-900/50',
-    bgColor: 'bg-red-950/30'
   },
   {
     name: '블랙 마켓 (The Exchange)',
@@ -477,15 +619,6 @@ const FACTIONS_DATA = [
     color: 'text-orange-500',
     borderColor: 'border-orange-900/50',
     bgColor: 'bg-orange-950/30'
-  },
-  {
-    name: '맥박 감시자 (Pulse Watchers)',
-    symbol: Activity,
-    territory: '외곽 순환선 및 블라인드 섹터',
-    description: '어떤 세력에도 속하지 않은 미지의 정보망. 무력 충돌보다는 숨는 것에 특화된 생존 전문가들이다. 선로나 환풍구를 통한 미세한 진동, 결로 맺히는 소리까지 포착해 수 호선 너머의 위험을 읽어낸다. 목숨과 직결된 대가를 지불하면 추적자를 교란할 가짜 소음 트랩이나 임시 도피처를 알려준다.',
-    color: 'text-blue-500',
-    borderColor: 'border-blue-900/50',
-    bgColor: 'bg-blue-950/30'
   },
   {
     name: '퍼슈어 (Pursuers)',
